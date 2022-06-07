@@ -817,3 +817,283 @@ solution = [1, 4, 6, 4, 1]
 
 test_case = [n, solution]
 test_function(test_case)
+
+# ---------------------- event after odd -------------------------------
+print("-------------------------- even after odd --------------------------------")
+
+
+class NodeEvenOdd:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+
+def even_after_odd(head):
+    """
+    :param - head - head of linked list
+    return - updated list with all even elements are odd elements
+    """
+
+    if head is None:
+        return head
+
+    head_odd = None
+    tail_odd = None
+
+    head_even = None
+    tail_even = None
+
+    current = head
+    while current:
+        next_node = current.next
+
+        if current.data % 2 == 0:
+            if head_even is None:
+                head_even = current
+                tail_even = head_even
+            else:
+                tail_even.next = current
+                tail_even = tail_even.next
+        else:
+            if head_odd is None:
+                head_odd = current
+                tail_odd = head_odd
+            else:
+                tail_odd.next = current
+                tail_odd = tail_odd.next
+        #current.next = None
+        #current = next_node
+        current = current.next
+    if head_odd is None:
+        return head_even
+    tail_odd.next = head_even
+    return head_odd
+
+
+# helper functions for testing purpose
+
+
+def create_linked_list(arr):
+    if len(arr) == 0:
+        return None
+    head = NodeEvenOdd(arr[0])
+    tail = head
+    for data in arr[1:]:
+        tail.next = NodeEvenOdd(data)
+        tail = tail.next
+    return head
+
+
+def print_linked_list(head):
+    while head:
+        print(head.data, end=' ')
+        head = head.next
+    print()
+
+
+def test_function(test_case):
+    head = test_case[0]
+    solution = test_case[1]
+
+    node_tracker = dict({})
+    node_tracker['nodes'] = list()
+    temp = head
+    while temp:
+        node_tracker['nodes'].append(temp)
+        temp = temp.next
+
+    head = even_after_odd(head)
+    temp = head
+    index = 0
+    try:
+        while temp:
+            if temp.data != solution[index] or temp not in node_tracker['nodes']:
+                print("Fail")
+                return
+            temp = temp.next
+            index += 1
+        print("Pass")
+    except Exception as e:
+        print("Fail")
+
+
+arr = [1, 2, 3, 4, 5, 6]
+solution = [1, 3, 5, 2, 4, 6]
+
+head = create_linked_list(arr)
+test_case = [head, solution]
+test_function(test_case)
+arr = [1, 3, 5, 7]
+solution = [1, 3, 5, 7]
+
+head = create_linked_list(arr)
+test_case = [head, solution]
+test_function(test_case)
+arr = [2, 4, 6, 8]
+solution = [2, 4, 6, 8]
+head = create_linked_list(arr)
+test_case = [head, solution]
+test_function(test_case)
+
+# ----------------------------- Skip i , delete j ---------------------------------------
+print("----------------------------- Skip i , delete j ---------------------------------------")
+
+
+# def skip_i_delete_j(head, i, j):
+#     """
+#     :param: head - head of linked list
+#     :param: i - first i nodes that are to be skipped
+#     :param: j - next j nodes that are to be deleted
+#     return - return the updated head of the linked list
+#     """
+#     # pass
+# # helper functions for testing purpose
+#     if i <= 0 or j < 0:
+#         return None
+#     if j == 0:
+#         return head
+#     if head is None:
+#         return head
+#     node = head
+#     while node.next:
+#         for _ in range(1, i):
+#             if node.next is not None:
+#                 node = node.next
+#         new_node = node
+#         for _ in range(1, j+2):
+#             if new_node.next is not None:
+#                 new_node = new_node.next
+#             else:
+#                 node.next = None
+#                 return head
+#         if new_node is not node:
+#             node.next = new_node
+#         if node.next is not None:
+#             node = node.next
+#     return head
+
+# Solution
+"""
+:param: head - head of linked list
+:param: i - first i nodes that are to be skipped
+:param: j - next j nodes that are to be deleted
+return - return the updated head of the linked list
+"""
+'''
+The Idea: 
+Traverse the Linkedist. Make use of two references - current and previous.
+ - Skip i-1 nodes. Keep incrementing the current. Mark the i-1`^th node as previous`. 
+ - Delete next j nodes. Keep incrementing the current.
+ - Connect the previous.next to the current
+'''
+
+
+def skip_i_delete_j(head, i, j):
+    # Edge case - Skip 0 nodes (means Delete all nodes)
+    if i == 0:
+        return None
+
+    # Edge case - Delete 0 nodes
+    if j == 0:
+        return head
+
+    # Invalid input
+    if head is None or j < 0 or i < 0:
+        return head
+
+    # Helper references
+    current = head
+    previous = None
+
+    # Traverse - Loop untill there are Nodes available in the LinkedList
+    while current:
+
+        '''skip (i - 1) nodes'''
+        for _ in range(i - 1):
+            if current is None:
+                return head
+            current = current.next
+        previous = current
+        current = current.next
+
+        '''delete next j nodes'''
+        for _ in range(j):
+            if current is None:
+                break
+            next_node = current.next
+            current = next_node
+
+        '''Connect the previous.next to the current'''
+        previous.next = current
+
+    # Loop ends
+
+    return head
+
+
+def create_linked_list(arr):
+    if len(arr) == 0:
+        return None
+    head = Node(arr[0])
+    tail = head
+    for data in arr[1:]:
+        tail.next = Node(data)
+        tail = tail.next
+    return head
+
+
+def print_linked_list(head):
+    while head:
+        print(head.data, end=' ')
+        head = head.next
+    print()
+
+
+def test_function(test_case):
+    head = test_case[0]
+    i = test_case[1]
+    j = test_case[2]
+    solution = test_case[3]
+
+    temp = skip_i_delete_j(head, i, j)
+    index = 0
+    try:
+        while temp is not None:
+            if temp.value != solution[index]:
+                print("Fail")
+                return
+            index += 1
+            temp = temp.next
+        print("Pass")
+    except Exception as e:
+        print("Fail")
+
+
+arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+i = 2
+j = 2
+head = create_linked_list(arr)
+solution = [1, 2, 5, 6, 9, 10]
+test_case = [head, i, j, solution]
+test_function(test_case)
+arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+i = 2
+j = 3
+head = create_linked_list(arr)
+solution = [1, 2, 6, 7, 11, 12]
+test_case = [head, i, j, solution]
+test_function(test_case)
+arr = [1, 2, 3, 4, 5]
+i = 2
+j = 4
+head = create_linked_list(arr)
+solution = [1, 2]
+test_case = [head, i, j, solution]
+test_function(test_case)
+arr = [1, 2, 3, 4, 5]
+i = 2
+j = 0
+head = create_linked_list(arr)
+solution = [1, 2, 3, 4, 5]
+test_case = [head, i, j, solution]
+test_function(test_case)
