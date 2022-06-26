@@ -55,8 +55,16 @@ def minimum_bracket_reversals(input_string):
 
     # pass
     stack = Stack()
+    if len(input_string) % 2 != 0:
+        return None
     for i in input_string:
-        top_val = stack.top()
+        top = stack.top()
+        if top != None:
+            if top == "{" and i == "}":
+                stack.pop()
+                continue
+        stack.push(i)
+    return stack.size()/2
 
 
 def test_function(test_case):
