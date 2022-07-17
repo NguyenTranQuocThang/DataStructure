@@ -27,7 +27,7 @@ def tower_of_Hanoi(num_disks):
     tower_of_Hanoi_soln(num_disks, 'S', 'A', 'D')
 
 
-tower_of_Hanoi(2)
+tower_of_Hanoi(3)
 
 # Compare your results with the following test cases
 # num_disks = 2
