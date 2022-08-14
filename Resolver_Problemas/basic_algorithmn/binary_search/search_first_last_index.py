@@ -1,55 +1,54 @@
 # Binary search: First and last indexes
 
-from inspect import trace
-from operator import le
-
-
 def first_and_last_index(arr, number):
-    """
-    Given a sorted array that may have duplicate values, use binary 
-    search to find the first and last indexes of a given value.
+    # search first occurence
+    first_index = find_start_index(arr, number, 0, len(arr) - 1)
 
-    Args:
-        arr(list): Sorted array (or Python list) that may have duplicate values
-        number(int): Value to search for in the array
-    Returns:
-        a list containing the first and last indexes of the given value
-    """
+    # search last occurence
+    last_index = find_end_index(arr, number, 0, len(arr) - 1)
+    return [first_index, last_index]
 
-    # TODO: Write your first_and_last function here
-    # Note that you may want to write helper functions to find the start
-    # index and the end index
 
-    # pass
-    list = []
-    index = recursive_binary_search(number, arr)
-    if not index:
-        return list
+def find_start_index(arr, number, start_index, end_index):
+    # binary search solution to search for the first index of the array
+    if start_index > end_index:
+        return -1
+
+    mid_index = start_index + (end_index - start_index)//2
+
+    if arr[mid_index] == number:
+        current_start_pos = find_start_index(
+            arr, number, start_index, mid_index - 1)
+        if current_start_pos != -1:
+            start_pos = current_start_pos
+        else:
+            start_pos = mid_index
+        return start_pos
+
+    elif arr[mid_index] < number:
+        return find_start_index(arr, number, mid_index + 1, end_index)
     else:
-        list.append(index)
-    index_temp = index
-    while arr[index_temp] == number:
-        if(arr[index_temp - 1] == number):
-            index_temp -= 1
-            list.append(index_temp)
-    index_temp = index
-    while arr[index_temp] == number:
-        if(arr[index_temp + 1] == number):
-            index_temp += 1
-            list.append(index_temp)
-    return list
+        return find_start_index(arr, number, start_index, mid_index - 1)
 
 
-def recursive_binary_search(target, source, left=0):
-    if len(source) == 0:
-        return None
-    center = (len(source) - 1) // 2
-    if source[center] == target:
-        return center + left
-    elif source[center] > target:
-        return recursive_binary_search(target, source[:center], left)
+def find_end_index(arr, number, start_index, end_index):
+    # binary search solution to search for the last index of the array
+    if start_index > end_index:
+        return -1
+
+    mid_index = start_index + (end_index - start_index)//2
+
+    if arr[mid_index] == number:
+        current_end_pos = find_end_index(arr, number, mid_index + 1, end_index)
+        if current_end_pos != -1:
+            end_pos = current_end_pos
+        else:
+            end_pos = mid_index
+        return end_pos
+    elif arr[mid_index] < number:
+        return find_end_index(arr, number, mid_index + 1, end_index)
     else:
-        return recursive_binary_search(target, source[center+1:], left+center+1)
+        return find_end_index(arr, number, start_index, mid_index - 1)
 
 
 def test_function(test_case):

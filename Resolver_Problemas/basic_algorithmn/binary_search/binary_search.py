@@ -169,6 +169,6 @@ def contains(target, source):
     return recursive_binary_search(target, source) is not None
 
 
-letters = ['a', 'c', 'd', 'f', 'g']
+letters = []
 print(contains('a', letters))  # True
 print(contains('b', letters))  # False
