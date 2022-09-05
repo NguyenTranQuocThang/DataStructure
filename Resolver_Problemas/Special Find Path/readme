@@ -1,0 +1,96 @@
+One application of the search algorithm is to find the shortest route between two cities. Given the map below, can we find a path from Arad to Bucharest?
+https://video.udacity-data.com/topher/2020/August/5f443cac_l1-c3-quiz/l1-c3-quiz.png
+
+The route finding problem can be formulated as follows:
+
+Initial state, denoted by S0, is any state that can be designated as the starting point.
+Actions, denoted by: {a1, a2, a3, ...}, is a set of the possible actions available to the agent at any given state.
+Results, denoted by S', is the new stage where the agent ends up after taking an action at a given state.
+Goal Test, denoted by a boolean of True or False, checks whether the current state is the goal state.
+Path Cost is the sum of the cost of the individual steps. In the route finding problem, the cost could be the distance between two cities.
+
+Note here that we're only looking at how many "steps", or nodes visited, we have to take to go from one node to another. The paths also show a cost value, but we're ignoring those for now.
+
+Note here that we're only looking at how many "steps", or nodes visited, we have to take to go from one node to another. The paths also show a cost value, but we're ignoring those for now.
+
+https://video.udacity-data.com/topher/2018/November/5be5d072_uniform-cost-search-image/uniform-cost-search-image.png
+
+Explored Frontier
+Arad Zerind
+Sibiu
+Timisoara
+Path Cost
+Arad >> Zerind 75 (choose)
+Arad >> Sibiu 140
+Arad >> Timisoara 118
+
+https://video.udacity-data.com/topher/2018/November/5be5d117_uniform-cost-search-1/uniform-cost-search-1.png
+
+Explored Frontier
+Arad Oradea
+Zerind Sibiu
+Timisoara
+Path Cost
+Arad >> Zerind >> Oradea 146
+Arad >> Sibiu 140
+Arad >> Timisoara 118 (choose)
+
+https://video.udacity-data.com/topher/2018/November/5be5de47_uniform-cost-search-2/uniform-cost-search-2.png
+
+Explored Frontier
+Arad Oradea
+Zerind Fagaras
+Sibiu Rimnicu Vilcea
+Timisoara Lugoj
+Path Cost
+Arad >> Zerind >> Oradea 146 (choose)
+Arad >> Sibiu >> Fagaras 239
+Arad >> Sibiu >> Rimnicu Vilcea 220
+Arad >> Timisoara >> Lugoj 229
+
+https://video.udacity-data.com/topher/2018/November/5be5f76c_uniform-cost-search-3/uniform-cost-search-3.png
+
+Explored Frontier
+Arad Fagaras
+Zerind Rimnicu Vilcea
+Sibiu Lugoj
+Timisoara
+Oradea
+Path Cost
+Arad >> Zerind >> Oradea stuck
+Arad >> Sibiu >> Fagaras 239
+Arad >> Sibiu >> Rimnicu Vilcea 220 (choose)
+Arad >> Timisoara >> Lugoj 229
+
+picture 4
+
+Path Cost
+Arad >> Zerind >> Oradea stuck
+Arad >> Sibiu >> Fagaras >> Bucharest 450
+Arad >> Sibiu >> Rimnicu Vilcea >> Pitesti 317
+Arad >> Sibiu >> Rimnicu Vilcea >> Craiova 366
+Arad >> Timisoara >> Lugoj >> Mehadia 299
+
+picture 5
+
+Now that we've added quite a few paths to our map, it can be a bit difficult to follow which paths are being checked at each step.
+
+Starting at 1:30, we are checking the path coming into Craiova from Rimnicu Vilcea, and heading toward either Drobeta (366+120 = 486) or Pitesti (366+318 = 504), both of which are worse than our current best of 418.
+
+After that, we already know the path to get to Drobeta was worse than the path to get to Craiova, so there cannot be a more beneficial path heading to that already explored location.
+
+Now that we've added quite a few paths to our map, it can be a bit difficult to follow which paths are being checked at each step.
+
+Starting at 1:30, we are checking the path coming into Craiova from Rimnicu Vilcea, and heading toward either Drobeta (366+120 = 486) or Pitesti (366+318 = 504), both of which are worse than our current best of 418.
+
+After that, we already know the path to get to Drobeta was worse than the path to get to Craiova, so there cannot be a more beneficial path heading to that already explored location.
+
+picture 6
+
+Uniform Cost search - expands out equally in all directions, may expend additional effort getting to a fairly direct path to the goal.
+Greedy best-first search - expands outward toward locations estimated as closer to the goal. If a direct path is available, expends much less effort than Uniform Cost; however, it does not consider any routes in which it may need to temporarily take a further away path in order to arrive at an overall shorter path.
+A\* Search - utilizes both of these - will try to optimize with both the shortest path and the goal in mind. We'll see how this works in the next video.
+
+Uniform Cost search - expands out equally in all directions, may expend additional effort getting to a fairly direct path to the goal. Greedy best-first search - expands outward toward locations estimated as closer to the goal. If a direct path is available, it expends much less effort than Uniform Cost; however, it does not consider any routes in which it may need to temporarily take a further away path in order to arrive at an overall shorter path. A\* Search - utilizes both of these - will try to optimize with both the shortest path and the goal in mind. We'll see how this works in the next video.
+
+read docA
